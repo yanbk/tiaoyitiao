@@ -35,9 +35,9 @@ var GameScene = (function (_super) {
             y: 0
         };
         // 左侧跳跃点
-        _this.leftOrigin = { "x": 180, "y": 350 };
+        _this.leftOrigin = { "x": 180, "y": 512 };
         // 右侧跳跃点
-        _this.rightOrigin = { "x": 505, "y": 350 };
+        _this.rightOrigin = { "x": 505, "y": 512 };
         _this.init();
         _this.reset();
         return _this;
@@ -58,10 +58,10 @@ var GameScene = (function (_super) {
         Utils.blocks = [];
         var blockNode = this.createBlock();
         blockNode.x = 200;
-        blockNode.y = Utils.stageHeight / 2 + blockNode.height;
+        blockNode.y = Utils.stageHeight / 2 + blockNode.height + 162;
         this.currentBlock = blockNode;
         this.role = new Role();
-        this.addChild(this.role);
+        this.blockContainer.addChild(this.role);
         this.role.anchorOffsetX = this.role.width / 2;
         this.role.anchorOffsetY = this.role.height - 12 + 162;
         // 摆正小人的位置
@@ -72,7 +72,6 @@ var GameScene = (function (_super) {
     };
     GameScene.prototype.touchBegin = function () {
         this.startTime = new Date().getTime();
-        console.log('down');
         // 变形
         egret.Tween.get(this.role).to({
             scaleY: 0.5,
@@ -96,8 +95,6 @@ var GameScene = (function (_super) {
         //     time = this.time / 2;
         // }
         time = 400;
-        console.log(this.time, time);
-        console.log('up');
         // 判断是否是在按下状态
         if (!this.isPress) {
             return;
@@ -133,25 +130,35 @@ var GameScene = (function (_super) {
     };
     GameScene.prototype.jumpResult = function () {
         var _this = this;
-        console.log(Math.pow(this.currentBlock.x - this.role.x, 2) + Math.pow(this.currentBlock.y - this.role.y, 2) <= 70 * 70);
-        console.log(this.currentBlock.isHit(this.targetPos.x, this.targetPos.y));
-        // this.role.y += 162
-        if (Math.pow(this.currentBlock.x - this.role.x, 2) + Math.pow(this.currentBlock.y - (this.role.y), 2) <= 70 * 70) {
+        // console.log(Math.pow(this.currentBlock.x - this.role.x, 2) + Math.pow(this.currentBlock.y - this.role.y, 2) <= 70 * 70)
+        // console.log(this.currentBlock.isHit(this.targetPos.x, this.targetPos.y))
+        console.log(this.role.x - this.currentBlock.x);
+        var distance = Math.pow(this.currentBlock.x - this.role.x, 2) + Math.pow(this.currentBlock.y - (this.role.y), 2);
+        var s = 0;
+        if (distance <= 70 * 70) {
             //更新积分
-            this.scoreNum++;
+            if (distance <= 15 * 15) {
+                this.scoreNum += 2;
+                s = 2;
+            }
+            else {
+                this.scoreNum++;
+                s = 1;
+            }
             this.score.scoreText = this.scoreNum.toString();
             // 随机下一个方块出现的位置
             this.direction = Math.random() > 0.5 ? 1 : -1;
             // 当前方块要移动到相应跳跃点的距离
             var blockX, blockY;
             blockX = this.direction > 0 ? this.leftOrigin.x : this.rightOrigin.x;
-            blockY = Utils.stageHeight / 2 + this.currentBlock.height;
+            blockY = Utils.stageHeight / 2 + this.currentBlock.height + 162;
             // 小人要移动到的点.
             var roleX, roleY;
             roleX = this.role.x - (this.currentBlock.x - blockX);
             roleY = this.role.y - (this.currentBlock.y - blockY);
             // 更新页面
             this.update(this.currentBlock.x - blockX, this.currentBlock.y - blockY);
+            this.role.score = s;
             // 更新小人的位置
             egret.Tween.get(this.role).to({
                 x: roleX,
@@ -164,16 +171,32 @@ var GameScene = (function (_super) {
             });
         }
         else {
+            if (this.direction > 0) {
+                if (this.role.x - this.currentBlock.x > 70) {
+                    console.log('正外');
+                    this.blockContainer.swapChildren(this.role, this.currentBlock);
+                }
+                if (this.role.x - this.currentBlock.x < -70) {
+                    console.log('正内');
+                    this.blockContainer.swapChildren(this.role, this.prevBlock);
+                    this.blockContainer.swapChildren(this.role, this.currentBlock);
+                }
+            }
+            else {
+                if (this.role.x - this.currentBlock.x > 58) {
+                    console.log('负内');
+                    this.blockContainer.swapChildren(this.role, this.prevBlock);
+                    this.blockContainer.swapChildren(this.role, this.currentBlock);
+                }
+                if (this.role.x - this.currentBlock.x < -58) {
+                    console.log('负外');
+                    this.blockContainer.swapChildren(this.role, this.currentBlock);
+                }
+            }
+            egret.Tween.get(this.role).wait(200).to({ y: this.role.y + 100 }, 1000).call(function () {
+                GameControler.instance.gameOverAdd();
+            });
             // 失败,弹出重新开始的panel
-            GameControler.instance.gameOverAdd();
-            // egret.Tween.get(this.role).wait( 100 ).to({ rotation: this.direction > 0 ? -90 : 90 }, 1000).call(() => {
-            // 	// console.log('游戏失败!')
-            // 	// this.overPanel.visible = true;
-            // 	// this.overScoreLabel.text = this.score.toString();
-            // 	// this.blockPanel.touchEnabled = true;
-            //     // this.gameOver();
-            //     GameControler.instance.gameOverAdd();
-            // });
         }
     };
     GameScene.prototype.update = function (x, y) {
@@ -195,7 +218,6 @@ var GameScene = (function (_super) {
                 }, 1000);
             }
         }
-        // console.log(this.blockArr);
     };
     // 添加一个方块
     GameScene.prototype.addBlock = function () {
@@ -213,6 +235,7 @@ var GameScene = (function (_super) {
             blockNode.y = this.currentBlock.y - distance * this.tanAngle;
         }
         this.currentBlock = blockNode;
+        this.blockContainer.swapChildren(this.role, this.currentBlock);
     };
     // 工厂方法,创建一个方块
     GameScene.prototype.createBlock = function () {
