@@ -35,6 +35,12 @@ class GameScene extends egret.DisplayObjectContainer{
 	private leftOrigin = { "x": 180, "y": 512 };
 	// 右侧跳跃点
 	private rightOrigin = { "x": 505, "y": 512 };
+    // 按下的音频
+	private pushVoice: egret.Sound;
+	// 按下音频的SoundChannel对象
+	private pushSoundChannel: egret.SoundChannel;
+	// 弹跳的音频
+	private jumpVoice: egret.Sound;
 
     constructor(){
         super();
@@ -43,6 +49,10 @@ class GameScene extends egret.DisplayObjectContainer{
     }
 
     private init(){
+        // 初始化音频
+		this.pushVoice = RES.getRes('push_mp3');
+		this.jumpVoice = RES.getRes('jump_mp3');
+
         this.touchEnabled = true;
         this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.touchBegin, this);
         this.addEventListener(egret.TouchEvent.TOUCH_END, this.touchEnd, this);
@@ -78,6 +88,9 @@ class GameScene extends egret.DisplayObjectContainer{
     }
 
     public touchBegin() {
+        // 播放按下的音频
+		this.pushSoundChannel = this.pushVoice.play(0, 1);
+
         this.startTime = new Date().getTime();
         // 变形
         egret.Tween.get(this.role).to({
@@ -109,6 +122,9 @@ class GameScene extends egret.DisplayObjectContainer{
 		}
         // 立刻让屏幕不可点,等小人落下后重新可点
         this.touchEnabled = false;
+        // 停止播放按压音频,并且播放弹跳音频
+		this.pushSoundChannel.stop()
+		this.jumpVoice.play(0, 1);
         // 清除所有动画
 		egret.Tween.removeAllTweens();
 

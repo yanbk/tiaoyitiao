@@ -43,6 +43,9 @@ var GameScene = (function (_super) {
         return _this;
     }
     GameScene.prototype.init = function () {
+        // 初始化音频
+        this.pushVoice = RES.getRes('push_mp3');
+        this.jumpVoice = RES.getRes('jump_mp3');
         this.touchEnabled = true;
         this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.touchBegin, this);
         this.addEventListener(egret.TouchEvent.TOUCH_END, this.touchEnd, this);
@@ -71,6 +74,8 @@ var GameScene = (function (_super) {
         this.addBlock();
     };
     GameScene.prototype.touchBegin = function () {
+        // 播放按下的音频
+        this.pushSoundChannel = this.pushVoice.play(0, 1);
         this.startTime = new Date().getTime();
         // 变形
         egret.Tween.get(this.role).to({
@@ -101,6 +106,9 @@ var GameScene = (function (_super) {
         }
         // 立刻让屏幕不可点,等小人落下后重新可点
         this.touchEnabled = false;
+        // 停止播放按压音频,并且播放弹跳音频
+        this.pushSoundChannel.stop();
+        this.jumpVoice.play(0, 1);
         // 清除所有动画
         egret.Tween.removeAllTweens();
         egret.Tween.get(this.prevBlock).to({
