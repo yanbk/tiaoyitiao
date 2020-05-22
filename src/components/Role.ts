@@ -2,12 +2,22 @@ class Role extends egret.Sprite{
     private _score = 0;
     constructor(){
         super();
-        let role = Utils.createBitmapByName('piece_png');
-        this.addChild(role);
         this.initView();
+        this.changeScore();
     }
 
-    private initView(){
+    private initView() {
+        // let role1 = Utils.createBitmapByName('piece_png');
+        // this.addChild(role1);
+        // role1.x = -10;
+        // role1.alpha = 0.5;
+
+        
+        let role = Utils.createBitmapByName('piece_png');
+        this.addChild(role);
+    }
+
+    private changeScore(){
         if(this._score == 0){
             return;
         }
@@ -35,6 +45,6 @@ class Role extends egret.Sprite{
     }
     public set score(val: number){
         this._score = val;
-        this.initView();
+        this.changeScore();
     }
 }

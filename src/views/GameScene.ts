@@ -31,6 +31,11 @@ class GameScene extends egret.DisplayObjectContainer{
         x: 0,
         y: 0
     };
+    // 落脚点
+    private targetPos1 = {
+        x: 0,
+        y: 0
+    };
     // 左侧跳跃点
 	private leftOrigin = { "x": 180, "y": 512 };
 	// 右侧跳跃点
@@ -41,6 +46,8 @@ class GameScene extends egret.DisplayObjectContainer{
 	private pushSoundChannel: egret.SoundChannel;
 	// 弹跳的音频
 	private jumpVoice: egret.Sound;
+    //影子
+    private role1: Role;
 
     constructor(){
         super();
@@ -75,6 +82,15 @@ class GameScene extends egret.DisplayObjectContainer{
 		blockNode.y = Utils.stageHeight / 2 + blockNode.height + 162;
         this.currentBlock = blockNode;
 
+        this.role1 = new Role();
+        this.blockContainer.addChild(this.role1);
+        this.role1.anchorOffsetX = this.role1.width / 2 - 5;
+		this.role1.anchorOffsetY = this.role1.height - 12 + 162;
+        // 摆正小人的位置
+		this.role1.y = this.currentBlock.y;
+		this.role1.x = this.currentBlock.x;
+        this.role1.alpha = 0.5;
+
         this.role = new Role();
         this.blockContainer.addChild(this.role);
         this.role.anchorOffsetX = this.role.width / 2;
@@ -102,6 +118,11 @@ class GameScene extends egret.DisplayObjectContainer{
         }, 3000)
 
         this.isPress = true;
+
+        egret.Tween.get(this.role1).to({
+            scaleY: 0.5,
+            scaleX: 1.5
+        }, 3000)
     }
 
     public touchEnd() {
@@ -136,17 +157,29 @@ class GameScene extends egret.DisplayObjectContainer{
         this.targetPos.x = this.role.x + this.time * this.speed * this.direction;
         this.targetPos.y = this.role.y + this.time * this.speed * (this.currentBlock.y - this.role.y) / (this.currentBlock.x - this.role.x) * this.direction - 162;
 
+        this.targetPos1.x = this.role1.x + (this.time - (Math.random() > 0.5 ? Math.random() * 100 : -Math.random() * 100)) * this.speed * this.direction;
+        this.targetPos1.y = this.role1.y + (this.time - (Math.random() > 0.5 ? Math.random() * 100 : -Math.random() * 100)) * this.speed * (this.currentBlock.y - this.role1.y) / (this.currentBlock.x - this.role1.x) * this.direction - 162;
+
         // 执行跳跃动画
         this.role.anchorOffsetY = this.role.height - 12
         this.role.y -= 162;
+
+        this.role1.anchorOffsetY = this.role1.height - 12
+        this.role1.y -= 162;
 		egret.Tween.get(this).to({ factor: 1 }, time).call(() => {
 			this.role.scaleY = 1;
 			this.role.scaleX = 1;
 			this.time = 0;
             this.role.y += 162;
+
+            this.role1.scaleY = 1;
+			this.role1.scaleX = 1;
+            this.role1.y += 162;
 			// 判断跳跃是否成功
 			this.jumpResult();
             this.role.anchorOffsetY = this.role.height - 12 + 162
+
+            this.role1.anchorOffsetY = this.role1.height - 12 + 162
             
 		});
 
@@ -154,8 +187,10 @@ class GameScene extends egret.DisplayObjectContainer{
         
 		egret.Tween.get(this.role).to({ rotation: this.direction > 0 ? 360 : -360 }, time).call(() => {
 			this.role.rotation = 0
-		}).call(() => {
-			// this.role.anchorOffsetY = this.role.height / 2;
+		});
+
+        egret.Tween.get(this.role1).to({ rotation: this.direction > 0 ? 360 : -360 }, time).call(() => {
+			this.role1.rotation = 0
 		});
     }
 
@@ -164,10 +199,12 @@ class GameScene extends egret.DisplayObjectContainer{
         // console.log(this.currentBlock.isHit(this.targetPos.x, this.targetPos.y))
         console.log(this.role.x - this.currentBlock.x)
         let distance = Math.pow(this.currentBlock.x - this.role.x, 2) + Math.pow(this.currentBlock.y - (this.role.y), 2);
+        let distance1 = Math.pow(this.currentBlock.x - this.role1.x, 2) + Math.pow(this.currentBlock.y - (this.role1.y), 2);
         let s = 0;
+        
         if(distance <= 70 * 70){
             //更新积分
-            if(distance <= 15 * 15){
+            if(distance <= 10 * 10){
                 this.scoreNum += 2;
                 s = 2;
             }else{
@@ -177,11 +214,15 @@ class GameScene extends egret.DisplayObjectContainer{
             this.score.scoreText = this.scoreNum.toString();
             // 随机下一个方块出现的位置
 			this.direction = Math.random() > 0.5 ? 1 : -1;
+
             // 当前方块要移动到相应跳跃点的距离
-			var blockX, blockY;
-			blockX = this.direction > 0 ? this.leftOrigin.x : this.rightOrigin.x;
-			blockY = Utils.stageHeight / 2 + this.currentBlock.height + 162;
+            var blockX, blockY;
+            blockX = this.direction > 0 ? this.leftOrigin.x : this.rightOrigin.x;
+            blockY = Utils.stageHeight / 2 + this.currentBlock.height + 162;
+            
 			// 小人要移动到的点.
+            let rx = this.role.x;
+            let ry = this.role.y;
 			var roleX, roleY;
 			roleX = this.role.x - (this.currentBlock.x - blockX);
 			roleY = this.role.y - (this.currentBlock.y - blockY);
@@ -198,9 +239,25 @@ class GameScene extends egret.DisplayObjectContainer{
 				// 让屏幕重新可点;
 				this.touchEnabled = true;
 			})
+
+            if(distance1 <= 70 * 70){
+                // 影子要移动到的点.
+                let roleX1 = roleX + (this.role1.x - rx);
+                let roleY1 = roleY + (this.role1.y - ry);
+                console.log(roleX, roleX1)
+                egret.Tween.get(this.role1).to({
+                    x: roleX1,
+                    y: roleY1
+                }, 1000)
+            }else{
+                if(this.role1.parent){
+                    console.log(111111)
+                    this.role1.parent.removeChild(this.role1)
+                }
+            }
         }else {
             if(this.direction > 0){
-                if(this.role.x - this.currentBlock.x > 70){
+                if(this.role.x - this.currentBlock.x > 58){
                     console.log('正外')
                     this.blockContainer.swapChildren(this.role, this.currentBlock);
                 }
@@ -224,7 +281,7 @@ class GameScene extends egret.DisplayObjectContainer{
                 GameControler.instance.gameOverAdd();
             });
 			// 失败,弹出重新开始的panel
-		}
+		} 
     }
 
     private update(x, y) {
@@ -263,6 +320,9 @@ class GameScene extends egret.DisplayObjectContainer{
 		}
 		this.currentBlock = blockNode;
         this.blockContainer.swapChildren(this.role, this.currentBlock);
+        if(this.role1.parent){
+            this.blockContainer.swapChildren(this.role1, this.currentBlock);
+        }
 	}
 
     // 工厂方法,创建一个方块
@@ -300,5 +360,8 @@ class GameScene extends egret.DisplayObjectContainer{
 	public set factor(value: number) {
 		this.role.x = (1 - value) * (1 - value) * this.role.x + 2 * value * (1 - value) * (this.role.x + this.targetPos.x) / 3 * (this.direction > 0 ? 1 : 2) + value * value * (this.targetPos.x);
 		this.role.y = (1 - value) * (1 - value) * this.role.y + 2 * value * (1 - value) * (this.targetPos.y - 250) + value * value * (this.targetPos.y);
+
+        this.role1.x = (1 - value) * (1 - value) * this.role1.x + 2 * value * (1 - value) * (this.role1.x + this.targetPos1.x) / 3 * (this.direction > 0 ? 1 : 2) + value * value * (this.targetPos1.x);
+		this.role1.y = (1 - value) * (1 - value) * this.role1.y + 2 * value * (1 - value) * (this.targetPos1.y - 250) + value * value * (this.targetPos1.y);
 	}
 }
