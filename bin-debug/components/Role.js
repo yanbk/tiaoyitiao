@@ -13,12 +13,19 @@ var Role = (function (_super) {
     function Role() {
         var _this = _super.call(this) || this;
         _this._score = 0;
-        var role = Utils.createBitmapByName('piece_png');
-        _this.addChild(role);
         _this.initView();
+        _this.changeScore();
         return _this;
     }
     Role.prototype.initView = function () {
+        // let role1 = Utils.createBitmapByName('piece_png');
+        // this.addChild(role1);
+        // role1.x = -10;
+        // role1.alpha = 0.5;
+        var role = Utils.createBitmapByName('piece_png');
+        this.addChild(role);
+    };
+    Role.prototype.changeScore = function () {
         var _this = this;
         if (this._score == 0) {
             return;
@@ -46,7 +53,7 @@ var Role = (function (_super) {
         },
         set: function (val) {
             this._score = val;
-            this.initView();
+            this.changeScore();
         },
         enumerable: true,
         configurable: true
