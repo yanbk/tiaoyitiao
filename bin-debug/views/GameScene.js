@@ -14,6 +14,7 @@ var GameScene = (function (_super) {
         var _this = _super.call(this) || this;
         //积分
         _this.scoreNum = 0;
+        _this.scoreNum1 = 0;
         // 下一个盒子方向(1靠右侧出现/-1靠左侧出现)
         _this.direction = 1;
         // 判断是否是按下状态
@@ -66,6 +67,7 @@ var GameScene = (function (_super) {
         var bg = Utils.createBitmapByName('bg_jpg');
         this.addChild(bg);
         this.addScore();
+        this.addScore1();
         this.blockContainer = new egret.DisplayObjectContainer();
         this.addChild(this.blockContainer);
         this.blockContainer.removeChildren();
@@ -208,6 +210,7 @@ var GameScene = (function (_super) {
                 if (this.role.x - this.currentBlock.x > 58) {
                     // console.log('正外')
                     this.blockContainer.swapChildren(this.role, this.currentBlock);
+                    this.blockContainer.swapChildren(this.role1, this.currentBlock);
                 }
                 if (this.role.x - this.currentBlock.x < -70) {
                     // console.log('正内')
@@ -224,6 +227,7 @@ var GameScene = (function (_super) {
                 if (this.role.x - this.currentBlock.x < -58) {
                     // console.log('负外')
                     this.blockContainer.swapChildren(this.role, this.currentBlock);
+                    this.blockContainer.swapChildren(this.role1, this.currentBlock);
                 }
             }
             if (this.isDeath1) {
@@ -243,7 +247,18 @@ var GameScene = (function (_super) {
         roleX = this.rx - (this.currentBlock.x - blockX);
         roleY = this.ry - (this.currentBlock.y - blockY);
         var distance1 = Math.pow(this.currentBlock.x - this.role1.x, 2) + Math.pow(this.currentBlock.y - (this.role1.y), 2);
+        var s = 0;
         if (distance1 <= 70 * 70) {
+            if (distance1 <= 10 * 10) {
+                this.scoreNum1 += 2;
+                s = 2;
+            }
+            else {
+                this.scoreNum1++;
+                s = 1;
+            }
+            this.score1.scoreText = this.scoreNum1.toString();
+            this.role1.score = s;
             // 影子要移动到的点.
             var roleX1 = roleX + (this.role1.x - this.role.x);
             var roleY1 = roleY + (this.role1.y - this.role.y);
@@ -357,9 +372,18 @@ var GameScene = (function (_super) {
     GameScene.prototype.addScore = function () {
         this.score = new Score();
         this.score.scoreText = this.scoreNum.toString();
+        this.score.name = '我的';
         this.addChild(this.score);
         this.score.x = 50;
         this.score.y = 50;
+    };
+    GameScene.prototype.addScore1 = function () {
+        this.score1 = new Score();
+        this.score1.scoreText = this.scoreNum1.toString();
+        this.score1.name = '影子';
+        this.addChild(this.score1);
+        this.score1.x = 500;
+        this.score1.y = 50;
     };
     Object.defineProperty(GameScene.prototype, "factor", {
         //添加factor的set,get方法,注意用public  

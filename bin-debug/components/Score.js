@@ -13,12 +13,13 @@ var Score = (function (_super) {
     function Score() {
         var _this = _super.call(this) || this;
         _this._text = '';
+        _this._name = '';
         _this.init();
         return _this;
     }
     Score.prototype.init = function () {
-        this.text = this._text;
-        this.size = 50;
+        this.text = this._name + ': ' + this._text;
+        this.size = 30;
         this.textColor = 0x000000;
         this.bold = true;
     };
@@ -28,6 +29,17 @@ var Score = (function (_super) {
         },
         set: function (val) {
             this._text = val;
+            this.init();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Score.prototype, "name", {
+        get: function () {
+            return this._name;
+        },
+        set: function (val) {
+            this._name = val;
             this.init();
         },
         enumerable: true,

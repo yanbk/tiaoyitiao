@@ -3,8 +3,10 @@ class GameScene extends egret.DisplayObjectContainer{
     private role: Role;
     //积分
     private score: Score;
+    private score1: Score;
     //积分
     private scoreNum: number = 0;
+    private scoreNum1: number = 0;
     //block容器
     private blockContainer: egret.DisplayObjectContainer;
     // 下一个盒子方向(1靠右侧出现/-1靠左侧出现)
@@ -77,6 +79,7 @@ class GameScene extends egret.DisplayObjectContainer{
         this.addChild(bg);
 
         this.addScore();
+        this.addScore1();
 
         this.blockContainer = new egret.DisplayObjectContainer();
         this.addChild(this.blockContainer);
@@ -243,6 +246,7 @@ class GameScene extends egret.DisplayObjectContainer{
                 if(this.role.x - this.currentBlock.x > 58){
                     // console.log('正外')
                     this.blockContainer.swapChildren(this.role, this.currentBlock);
+                    this.blockContainer.swapChildren(this.role1, this.currentBlock);
                 }
                 if(this.role.x - this.currentBlock.x < -70){
                     // console.log('正内')
@@ -258,6 +262,7 @@ class GameScene extends egret.DisplayObjectContainer{
                 if(this.role.x - this.currentBlock.x < -58){
                     // console.log('负外')
                     this.blockContainer.swapChildren(this.role, this.currentBlock);
+                    this.blockContainer.swapChildren(this.role1, this.currentBlock);
                 }
             }
 
@@ -280,7 +285,17 @@ class GameScene extends egret.DisplayObjectContainer{
         roleX = this.rx - (this.currentBlock.x - blockX);
         roleY = this.ry - (this.currentBlock.y - blockY);
         let distance1 = Math.pow(this.currentBlock.x - this.role1.x, 2) + Math.pow(this.currentBlock.y - (this.role1.y), 2);
+        let s = 0;
         if(distance1 <= 70 * 70){
+            if(distance1 <= 10 * 10){
+                this.scoreNum1 += 2;
+                s = 2;
+            }else{
+                this.scoreNum1 ++;
+                s = 1;
+            }
+            this.score1.scoreText = this.scoreNum1.toString();
+            this.role1.score = s;
             // 影子要移动到的点.
             let roleX1 = roleX + (this.role1.x - this.role.x);
             let roleY1 = roleY + (this.role1.y - this.role.y);
@@ -397,9 +412,19 @@ class GameScene extends egret.DisplayObjectContainer{
     private addScore() {
         this.score = new Score();
         this.score.scoreText = this.scoreNum.toString();
+        this.score.name = '我的';
         this.addChild(this.score);
         this.score.x = 50;
         this.score.y = 50;
+    }
+
+    private addScore1() {
+        this.score1 = new Score();
+        this.score1.scoreText = this.scoreNum1.toString();
+        this.score1.name = '影子';
+        this.addChild(this.score1);
+        this.score1.x = 500;
+        this.score1.y = 50;
     }
 
     //添加factor的set,get方法,注意用public  
