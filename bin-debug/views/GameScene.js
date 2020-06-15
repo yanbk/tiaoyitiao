@@ -169,7 +169,7 @@ var GameScene = (function (_super) {
             Utils.total = this.scoreNum;
             this.role.score = s;
             this.updatePage();
-            console.log(Utils.normalNum, Utils.perfectNum, Utils.continuousNum, this.continues);
+            // console.log(Utils.normalNum, Utils.perfectNum, Utils.continuousNum, this.continues)
         }
         else {
             if (this.direction > 0) {

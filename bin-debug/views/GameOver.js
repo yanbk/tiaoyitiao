@@ -22,7 +22,7 @@ var GameOver = (function (_super) {
         this.perfectNum.text = Utils.perfectNum.toString();
         this.perfectScore.text = (Utils.perfectNum * 2).toString();
         this.continuousNum.text = Utils.continuousNum.toString();
-        this.continuousScore.text = (Utils.total - Utils.normalNum - Utils.perfectNum * 2).toString();
+        this.continuousScore.text = ((2 + Utils.continuousNum * 2) * Utils.continuousNum / 2).toString();
         this.awardScore.text = (Utils.total - Utils.normalNum - Utils.perfectNum * 2).toString();
         this.total.text = (Utils.total + Utils.total - Utils.normalNum - Utils.perfectNum * 2).toString();
         this.againBtn.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
