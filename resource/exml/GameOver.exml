@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="GameOverSkin" width="640" height="1136" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Image source="bg_jpg" x="0" y="0"/>
+	<e:Image id="againBtn" source="restart_btn_png" x="166.5" y="858"/>
+	<e:Label text="游戏结束" x="141" y="88" anchorOffsetX="0" width="358" anchorOffsetY="0" height="82" verticalAlign="middle" textAlign="center" textColor="0x000000" size="40"/>
+	<e:Label text="次数" x="290" y="366" textColor="0x000000"/>
+	<e:Label text="分数" x="443.5" y="366" textColor="0x000000"/>
+    <e:Label text="普通落地" x="81" y="422" textColor="0x000000" verticalAlign="middle" textAlign="center"/>
+	<e:Label id="normalNum" text="0" x="270" y="422" verticalAlign="middle" textAlign="center" textColor="0x000000" width="100"/>
+	<e:Label id="normalScore" text="0" x="423.5" y="422" width="100" verticalAlign="middle" textAlign="center" textColor="0x000000"/>
+    <e:Label text="完美落地" x="81" y="472" textColor="0x000000" verticalAlign="middle" textAlign="center"/>
+	<e:Label id="perfectNum" text="0" x="270" y="472" verticalAlign="middle" textAlign="center" textColor="0x000000" width="100"/>
+	<e:Label id="perfectScore" text="0" x="423.5" y="472" width="100" verticalAlign="middle" textAlign="center" textColor="0x000000"/>
+    <e:Label text="最高连击" x="81" y="522" textColor="0x000000" verticalAlign="middle" textAlign="center"/>
+	<e:Label id="continuousNum" text="0" x="270" y="522" verticalAlign="middle" textAlign="center" textColor="0x000000" width="100"/>
+	<e:Label id="continuousScore" text="0" x="423.5" y="522" width="100" verticalAlign="middle" textAlign="center" textColor="0x000000"/>
+    <e:Label text="连击奖励" x="81" y="572" textColor="0x000000" verticalAlign="middle" textAlign="center"/>
+	<e:Label id="awardScore" text="0" x="423.5" y="572" width="100" verticalAlign="middle" textAlign="center" textColor="0x000000"/>
+    <e:Label text="总分" x="81" y="622" textColor="0x000000" verticalAlign="middle" textAlign="center"/>
+	<e:Label id="total" text="0" x="423.5" y="622" width="100" verticalAlign="middle" textAlign="center" textColor="0x000000"/>
+</e:Skin>

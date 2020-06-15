@@ -16,6 +16,10 @@ var Utils = (function () {
     Utils.blockimg = ["block1_png", "block2_png", "block3_png"];
     Utils.blocks = [];
     Utils.reblocks = [];
+    Utils.normalNum = 0;
+    Utils.perfectNum = 0;
+    Utils.continuousNum = 0;
+    Utils.total = 0;
     return Utils;
 }());
 __reflect(Utils.prototype, "Utils");

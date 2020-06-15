@@ -12,26 +12,32 @@ var GameOver = (function (_super) {
     __extends(GameOver, _super);
     function GameOver() {
         var _this = _super.call(this) || this;
+        _this.skinName = 'GameOverSkin';
         _this.init();
         return _this;
     }
     GameOver.prototype.init = function () {
-        var _that = this;
-        var shp = new egret.Shape();
-        shp.graphics.beginFill(0x000000, 0.5);
-        shp.graphics.drawRect(0, 0, Utils.stageWidth, Utils.stageHeight);
-        shp.graphics.endFill();
-        this.addChild(shp);
-        var againBtn = Utils.createBitmapByName('restart_btn_png');
-        this.addChild(againBtn);
-        againBtn.x = (Utils.stageWidth - againBtn.width) / 2;
-        againBtn.y = 900;
-        againBtn.touchEnabled = true;
-        againBtn.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
+        this.normalNum.text = Utils.normalNum.toString();
+        this.normalScore.text = Utils.normalNum.toString();
+        this.perfectNum.text = Utils.perfectNum.toString();
+        this.perfectScore.text = (Utils.perfectNum * 2).toString();
+        this.continuousNum.text = Utils.continuousNum.toString();
+        this.continuousScore.text = (Utils.total - Utils.normalNum - Utils.perfectNum * 2).toString();
+        this.awardScore.text = (Utils.total - Utils.normalNum - Utils.perfectNum * 2).toString();
+        this.total.text = (Utils.total + Utils.total - Utils.normalNum - Utils.perfectNum * 2).toString();
+        this.againBtn.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
             GameControler.instance.gameSceneAdd();
         }, this);
     };
+    GameOver.prototype.textShow = function (title, num, score, size, left, top) {
+        var txt = new egret.TextField();
+        this.addChild(txt);
+        txt.text = title + '          ' + num + '         ' + score;
+        txt.size = size;
+        txt.x = left;
+        txt.y = top;
+    };
     return GameOver;
-}(egret.DisplayObjectContainer));
-__reflect(GameOver.prototype, "GameOver");
+}(eui.Component));
+__reflect(GameOver.prototype, "GameOver", ["eui.UIComponent", "egret.DisplayObject"]);
 //# sourceMappingURL=GameOver.js.map

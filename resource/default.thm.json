@@ -1,0 +1,10 @@
+{
+	"skins": {
+		"GameOver": "resource/exml/GameOver.exml"
+	},
+	"autoGenerateExmlsList": true,
+	"exmls": [
+		"resource/exml/GameOver.exml"
+	],
+	"path": "resource/default.thm.json"
+}

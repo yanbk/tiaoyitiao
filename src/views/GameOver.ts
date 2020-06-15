@@ -1,23 +1,40 @@
-class GameOver extends egret.DisplayObjectContainer{
+class GameOver extends eui.Component implements  eui.UIComponent{
+    private againBtn: eui.Image;
+    private normalNum:eui.Label;
+    private normalScore:eui.Label;
+    private perfectNum:eui.Label;
+    private perfectScore:eui.Label;
+    private continuousNum:eui.Label;
+    private continuousScore:eui.Label;
+    private awardScore:eui.Label;
+    private total:eui.Label;
+
     constructor(){
         super();
+        this.skinName = 'GameOverSkin';
         this.init();
     }
     private init() {
-        var _that = this;
-        var shp: egret.Shape = new egret.Shape();
-        shp.graphics.beginFill( 0x000000, 0.5);
-        shp.graphics.drawRect( 0, 0, Utils.stageWidth, Utils.stageHeight );
-        shp.graphics.endFill();
-        this.addChild(shp);
+        this.normalNum.text = Utils.normalNum.toString();
+        this.normalScore.text = Utils.normalNum.toString();
+        this.perfectNum.text = Utils.perfectNum.toString();
+        this.perfectScore.text = (Utils.perfectNum * 2).toString();
+        this.continuousNum.text = Utils.continuousNum.toString();
+        this.continuousScore.text = (Utils.total - Utils.normalNum - Utils.perfectNum * 2).toString();
+        this.awardScore.text = (Utils.total - Utils.normalNum - Utils.perfectNum * 2).toString();
+        this.total.text = (Utils.total + Utils.total - Utils.normalNum - Utils.perfectNum * 2).toString();
 
-        let againBtn = Utils.createBitmapByName('restart_btn_png');
-        this.addChild(againBtn);
-        againBtn.x = (Utils.stageWidth - againBtn.width) / 2;
-        againBtn.y = 900;
-        againBtn.touchEnabled = true;
-        againBtn.addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
+        this.againBtn.addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
             GameControler.instance.gameSceneAdd();
         }, this);
+    }
+
+    private textShow(title, num, score, size, left, top) {
+        let txt = new  egret.TextField();
+        this.addChild(txt);
+        txt.text = title + '          ' + num + '         ' + score;
+        txt.size = size;
+        txt.x = left;
+        txt.y = top;
     }
 }

@@ -4,6 +4,10 @@ class Utils {
     public static blockimg: Array<string> = ["block1_png", "block2_png", "block3_png"];
     public static blocks: any = [];
     public static reblocks: any = [];
+    public static normalNum: number = 0;
+    public static perfectNum: number = 0;
+    public static continuousNum: number = 0;
+    public static total: number = 0;
 
     public static createBitmapByName(name: string) {
         let result = new egret.Bitmap();
