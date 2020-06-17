@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "bg_jpg,egret_icon_png,description_json,piece_png,push_mp3,relive_png,restart_btn_png,setting_bg_jpg,setting_btn_png,setting_off_png,setting_on_png,start_btn_png,streak_png,back_btn_png,block1_png,block2_png,block3_png,finger_png,jump_mp3",
+			"keys": "bg_jpg,egret_icon_png,description_json,piece_png,push_mp3,relive_png,restart_btn_png,setting_bg_jpg,setting_btn_png,setting_off_png,setting_on_png,start_btn_png,streak_png,back_btn_png,block1_png,block2_png,block3_png,finger_png,jump_mp3,eff1_tex_png,eff1_mc_json,eff1_tex_json,eff1_ske_json",
 			"name": "preload"
 		}
 	],
@@ -100,6 +100,26 @@
 			"name": "jump_mp3",
 			"type": "sound",
 			"url": "assets/jump.mp3"
+		},
+		{
+			"name": "eff1_tex_png",
+			"type": "image",
+			"url": "assets/eff1_tex.png"
+		},
+		{
+			"name": "eff1_mc_json",
+			"type": "json",
+			"url": "assets/eff1_mc.json"
+		},
+		{
+			"name": "eff1_tex_json",
+			"type": "json",
+			"url": "assets/eff1_tex.json"
+		},
+		{
+			"name": "eff1_ske_json",
+			"type": "json",
+			"url": "assets/eff1_ske.json"
 		}
 	]
 }

@@ -16,12 +16,9 @@ var Role = (function (_super) {
         _this.initView();
         _this.changeScore();
         return _this;
+        // this.eff();
     }
     Role.prototype.initView = function () {
-        // let role1 = Utils.createBitmapByName('piece_png');
-        // this.addChild(role1);
-        // role1.x = -10;
-        // role1.alpha = 0.5;
         var role = Utils.createBitmapByName('piece_png');
         this.addChild(role);
     };

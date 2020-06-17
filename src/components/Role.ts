@@ -4,15 +4,10 @@ class Role extends egret.Sprite{
         super();
         this.initView();
         this.changeScore();
+        // this.eff();
     }
 
     private initView() {
-        // let role1 = Utils.createBitmapByName('piece_png');
-        // this.addChild(role1);
-        // role1.x = -10;
-        // role1.alpha = 0.5;
-
-        
         let role = Utils.createBitmapByName('piece_png');
         this.addChild(role);
     }

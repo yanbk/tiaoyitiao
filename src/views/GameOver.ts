@@ -29,12 +29,4 @@ class GameOver extends eui.Component implements  eui.UIComponent{
         }, this);
     }
 
-    private textShow(title, num, score, size, left, top) {
-        let txt = new  egret.TextField();
-        this.addChild(txt);
-        txt.text = title + '          ' + num + '         ' + score;
-        txt.size = size;
-        txt.x = left;
-        txt.y = top;
-    }
 }

@@ -29,14 +29,6 @@ var GameOver = (function (_super) {
             GameControler.instance.gameSceneAdd();
         }, this);
     };
-    GameOver.prototype.textShow = function (title, num, score, size, left, top) {
-        var txt = new egret.TextField();
-        this.addChild(txt);
-        txt.text = title + '          ' + num + '         ' + score;
-        txt.size = size;
-        txt.x = left;
-        txt.y = top;
-    };
     return GameOver;
 }(eui.Component));
 __reflect(GameOver.prototype, "GameOver", ["eui.UIComponent", "egret.DisplayObject"]);
