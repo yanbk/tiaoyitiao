@@ -13,7 +13,7 @@ var Utils = (function () {
     Utils.setClick = function (btn, func) {
         btn.addEventListener(egret.TouchEvent.TOUCH_TAP, func, this);
     };
-    Utils.blockimg = ["block1_png", "block2_png", "block3_png"];
+    Utils.blockimg = ["f1_png", "f2_png", "f3_png", "f4_png", "f5_png", "f6_png", "f7_png", "y1_png", "y2_png", "y3_png", "y4_png", "y5_png"];
     Utils.blocks = [];
     Utils.reblocks = [];
     Utils.normalNum = 0;

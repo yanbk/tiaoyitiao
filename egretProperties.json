@@ -26,6 +26,10 @@
     },
     {
       "name": "dragonbones"
-    }
+    },
+    {
+			"name": "particle",
+			"path": "D:/wamp/wamp/www/egret/particle"
+		}
   ]
 }

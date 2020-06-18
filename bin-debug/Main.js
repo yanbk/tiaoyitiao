@@ -163,12 +163,31 @@ var Main = (function (_super) {
      * Create a game scene
      */
     Main.prototype.createGameScene = function () {
-        var bg = Utils.createBitmapByName('bg_jpg');
-        this.addChild(bg);
         Utils.stageWidth = this.stage.stageWidth;
         Utils.stageHeight = this.stage.stageHeight;
         GameControler.instance.setStage(this);
         GameControler.instance.gameStartAdd();
+        //加入龙骨
+        Utils.egretFactory = dragonBones.EgretFactory.factory;
+        var eff3_ske_json = RES.getRes("eff3_ske_json");
+        var eff3_tex_json = RES.getRes("eff3_tex_json");
+        var eff3_tex_png = RES.getRes("eff3_tex_png");
+        Utils.egretFactory.parseDragonBonesData(eff3_ske_json);
+        Utils.egretFactory.parseTextureAtlasData(eff3_tex_json, eff3_tex_png);
+        var eff2_ske_json = RES.getRes("eff2_ske_json");
+        var eff2_tex_json = RES.getRes("eff2_tex_json");
+        var eff2_tex_png = RES.getRes("eff2_tex_png");
+        Utils.egretFactory.parseDragonBonesData(eff2_ske_json);
+        Utils.egretFactory.parseTextureAtlasData(eff2_tex_json, eff2_tex_png);
+        var eff1_ske_json = RES.getRes("eff1_ske_json");
+        var eff1_tex_json = RES.getRes("eff1_tex_json");
+        var eff1_tex_png = RES.getRes("eff1_tex_png");
+        Utils.egretFactory.parseDragonBonesData(eff1_ske_json);
+        Utils.egretFactory.parseTextureAtlasData(eff1_tex_json, eff1_tex_png);
+        //拖尾粒子效果
+        var texture = RES.getRes("tuowei_png");
+        var config = RES.getRes("tuowei_json");
+        Utils.tuowei = new particle.GravityParticleSystem(texture, config);
     };
     return Main;
 }(egret.DisplayObjectContainer));

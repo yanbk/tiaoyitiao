@@ -61,22 +61,27 @@ var GameScene = (function (_super) {
         Utils.perfectNum = 0;
         Utils.continuousNum = 0;
         Utils.total = 0;
+        Utils.blocks = [];
         this.removeChildren();
-        var bg = Utils.createBitmapByName('bg_jpg');
+        var bg = new egret.Sprite();
+        bg.graphics.beginFill(0x606165);
+        bg.graphics.drawRect(0, 0, Utils.stageWidth, Utils.stageHeight);
+        bg.graphics.endFill();
         this.addChild(bg);
         this.addScore();
         this.blockContainer = new egret.DisplayObjectContainer();
         this.addChild(this.blockContainer);
         this.blockContainer.removeChildren();
-        Utils.blocks = [];
         var blockNode = this.createBlock();
         blockNode.x = 200;
-        blockNode.y = Utils.stageHeight / 2 + blockNode.height + 162;
+        blockNode.y = Utils.stageHeight / 2 + blockNode.height + 165;
         this.currentBlock = blockNode;
+        this.effFunc1();
+        this.effFunc2();
         this.role = new Role();
         this.blockContainer.addChild(this.role);
         this.role.anchorOffsetX = this.role.width / 2;
-        this.role.anchorOffsetY = this.role.height - 12 + 162;
+        this.role.anchorOffsetY = this.role.height - 16 + 165;
         // 摆正小人的位置
         this.role.y = this.currentBlock.y;
         this.role.x = this.currentBlock.x;
@@ -93,9 +98,13 @@ var GameScene = (function (_super) {
             scaleX: 1.5
         }, 3000);
         egret.Tween.get(this.prevBlock).to({
-            scaleY: 0.5
+            scaleY: 0.7
         }, 3000);
         this.isPress = true;
+        this.blockContainer.addChild(this.eff1);
+        this.blockContainer.swapChildren(this.role, this.eff1);
+        this.eff1.x = this.role.x;
+        this.eff1.y = this.role.y;
     };
     GameScene.prototype.touchEnd = function () {
         var _this = this;
@@ -113,38 +122,39 @@ var GameScene = (function (_super) {
         this.jumpVoice.play(0, 1);
         // 清除所有动画
         egret.Tween.removeAllTweens();
+        this.blockContainer.addChild(Utils.tuowei);
+        this.blockContainer.swapChildren(this.role, Utils.tuowei);
+        Utils.tuowei.start();
         egret.Tween.get(this.prevBlock).to({
             scaleY: 1
         }, time);
         this.isPress = false;
         this.targetPos.x = this.role.x + this.time * this.speed * this.direction;
-        this.targetPos.y = this.role.y + this.time * this.speed * (this.currentBlock.y - this.role.y) / (this.currentBlock.x - this.role.x) * this.direction - 162;
+        this.targetPos.y = this.role.y + this.time * this.speed * (this.currentBlock.y - this.role.y) / (this.currentBlock.x - this.role.x) * this.direction - 165;
         // 执行跳跃动画
-        this.role.anchorOffsetY = this.role.height - 12;
-        this.role.y -= 162;
+        this.role.anchorOffsetY = this.role.height - 16;
+        this.role.y -= 165;
         egret.Tween.get(this).to({ factor: 1 }, time).call(function () {
-            _this.role.scaleY = 1;
-            _this.role.scaleX = 1;
             _this.time = 0;
-            _this.role.y += 162;
+            _this.role.y += 165;
             // 判断跳跃是否成功
             _this.jumpResult();
-            _this.role.anchorOffsetY = _this.role.height - 12 + 162;
+            _this.role.anchorOffsetY = _this.role.height - 16 + 165;
         });
-        // 执行小人空翻动画
-        egret.Tween.get(this.role).to({ rotation: this.direction > 0 ? 360 : -360 }, time).call(function () {
+        // this.role.rotation = this.direction > 0 ? 30 : -30
+        egret.Tween.get(this.role).to({
+            rotation: this.direction > 0 ? 60 : -60
+        }, time).call(function () {
             _this.role.rotation = 0;
         });
+        this.blockContainer.removeChild(this.eff1);
     };
     GameScene.prototype.jumpResult = function () {
-        // console.log(Math.pow(this.currentBlock.x - this.role.x, 2) + Math.pow(this.currentBlock.y - this.role.y, 2) <= 70 * 70)
-        // console.log(this.currentBlock.isHit(this.targetPos.x, this.targetPos.y))
-        // console.log(this.role.x - this.currentBlock.x)
         var distance = Math.pow(this.currentBlock.x - this.role.x, 2) + Math.pow(this.currentBlock.y - (this.role.y), 2);
         var s = 0;
         if (distance <= 70 * 70) {
             //更新积分
-            if (distance <= 20 * 20) {
+            if (distance <= 10 * 10) {
                 if (this.isContinue) {
                     this.continues += 1;
                 }
@@ -158,6 +168,7 @@ var GameScene = (function (_super) {
                 if (this.continues > Utils.continuousNum) {
                     Utils.continuousNum = this.continues;
                 }
+                this.currentBlock.perfect = true;
             }
             else {
                 this.scoreNum++;
@@ -169,35 +180,49 @@ var GameScene = (function (_super) {
             Utils.total = this.scoreNum;
             this.role.score = s;
             this.updatePage();
-            // console.log(Utils.normalNum, Utils.perfectNum, Utils.continuousNum, this.continues)
+            egret.Tween.get(this.role).to({
+                scaleX: 1,
+                scaleY: 1
+            }, 100);
         }
         else {
-            if (this.direction > 0) {
-                if (this.role.x - this.currentBlock.x > 58) {
-                    // console.log('正外')
-                    this.blockContainer.swapChildren(this.role, this.currentBlock);
-                }
-                if (this.role.x - this.currentBlock.x < -70) {
-                    // console.log('正内')
-                    this.blockContainer.swapChildren(this.role, this.prevBlock);
-                    this.blockContainer.swapChildren(this.role, this.currentBlock);
-                }
-            }
-            else {
-                if (this.role.x - this.currentBlock.x > 58) {
-                    // console.log('负内')
-                    this.blockContainer.swapChildren(this.role, this.prevBlock);
-                    this.blockContainer.swapChildren(this.role, this.currentBlock);
-                }
-                if (this.role.x - this.currentBlock.x < -58) {
-                    // console.log('负外')
-                    this.blockContainer.swapChildren(this.role, this.currentBlock);
-                }
-            }
-            egret.Tween.get(this.role).to({ y: this.role.y + 100 }, 1000).call(function () {
-                GameControler.instance.gameOverAdd();
-            });
+            // if(this.direction > 0){
+            //     if(this.role.x - this.currentBlock.x > 58){
+            //         // console.log('正外')
+            //         this.blockContainer.swapChildren(this.role, this.currentBlock);
+            //     }
+            //     if(this.role.x - this.currentBlock.x < -70){
+            //         // console.log('正内')
+            //         this.blockContainer.swapChildren(this.role, this.prevBlock);
+            //         this.blockContainer.swapChildren(this.role, this.currentBlock);
+            //     }
+            // }else{
+            //     if(this.role.x - this.currentBlock.x > 58){
+            //         // console.log('负内')
+            //         this.blockContainer.swapChildren(this.role, this.prevBlock);
+            //         this.blockContainer.swapChildren(this.role, this.currentBlock);
+            //     }
+            //     if(this.role.x - this.currentBlock.x < -58){
+            //         // console.log('负外')
+            //         this.blockContainer.swapChildren(this.role, this.currentBlock);
+            //     }
+            // }
+            // egret.Tween.get(this.role).to({ y: this.role.y + 100  }, 1000).call(() => {
+            //     GameControler.instance.gameOverAdd();
+            // });
+            this.role.scaleY = 1;
+            this.role.scaleX = 1;
+            GameControler.instance.gameOverAdd();
         }
+        if (Utils.tuowei.parent) {
+            Utils.tuowei.stop();
+            Utils.tuowei.parent.removeChild(Utils.tuowei);
+        }
+        this.blockContainer.addChild(this.eff2);
+        this.eff2.animation.play("newAnimation", 1).timeScale = 3;
+        // this.blockContainer.swapChildren(this.role, this.eff2);
+        this.eff2.x = this.role.x;
+        this.eff2.y = this.role.y;
     };
     GameScene.prototype.updatePage = function () {
         var _this = this;
@@ -206,7 +231,7 @@ var GameScene = (function (_super) {
         // 当前方块要移动到相应跳跃点的距离
         var blockX, blockY;
         blockX = this.direction > 0 ? this.leftOrigin.x : this.rightOrigin.x;
-        blockY = Utils.stageHeight / 2 + this.currentBlock.height + 162;
+        blockY = Utils.stageHeight / 2 + this.currentBlock.height + 165;
         // 小人要移动到的点.
         var roleX, roleY;
         roleX = this.role.x - (this.currentBlock.x - blockX);
@@ -223,6 +248,10 @@ var GameScene = (function (_super) {
             // 让屏幕重新可点;
             _this.touchEnabled = true;
         });
+        // egret.Tween.get(this.eff2).to({
+        // 	x: this.role.x,
+        // 	y: this.role.y
+        // }, 1000)
     };
     GameScene.prototype.update = function (x, y) {
         // egret.Tween.removeAllTweens();
@@ -274,9 +303,6 @@ var GameScene = (function (_super) {
             blockNode = new Block();
         }
         this.blockContainer.addChild(blockNode);
-        // 设置方块的锚点
-        blockNode.anchorOffsetX = 222;
-        blockNode.anchorOffsetY = 240;
         // 把新创建的block添加进入blockArr里
         Utils.blocks.push(blockNode);
         return blockNode;
@@ -296,12 +322,27 @@ var GameScene = (function (_super) {
         },
         //计算方法参考 二次贝塞尔公式  
         set: function (value) {
-            this.role.x = (1 - value) * (1 - value) * this.role.x + 2 * value * (1 - value) * (this.role.x + this.targetPos.x) / 3 * (this.direction > 0 ? 1 : 2) + value * value * (this.targetPos.x);
+            this.role.x = (1 - value) * (1 - value) * this.role.x + 2 * value * (1 - value) * (this.role.x + this.targetPos.x) / 5 * (this.direction > 0 ? 2 : 3) + value * value * (this.targetPos.x);
             this.role.y = (1 - value) * (1 - value) * this.role.y + 2 * value * (1 - value) * (this.targetPos.y - 250) + value * value * (this.targetPos.y);
+            Utils.tuowei.emitterX = this.role.x;
+            Utils.tuowei.emitterY = this.role.y;
         },
         enumerable: true,
         configurable: true
     });
+    GameScene.prototype.effFunc1 = function () {
+        this.eff1 = Utils.egretFactory.buildArmatureDisplay("eff1");
+        this.eff1.anchorOffsetY = 190;
+        this.eff1.animation.play("newAnimation");
+    };
+    GameScene.prototype.effFunc2 = function () {
+        this.eff2 = Utils.egretFactory.buildArmatureDisplay("eff2");
+        this.eff2.anchorOffsetY = 150;
+        this.eff2.addEventListener(dragonBones.EventObject.COMPLETE, this.eff2Complete, this);
+    };
+    GameScene.prototype.eff2Complete = function () {
+        this.blockContainer.removeChild(this.eff2);
+    };
     return GameScene;
 }(egret.DisplayObjectContainer));
 __reflect(GameScene.prototype, "GameScene");

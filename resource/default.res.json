@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "bg_jpg,egret_icon_png,description_json,piece_png,push_mp3,relive_png,restart_btn_png,setting_bg_jpg,setting_btn_png,setting_off_png,setting_on_png,start_btn_png,streak_png,back_btn_png,block1_png,block2_png,block3_png,finger_png,jump_mp3,eff1_tex_png,eff1_mc_json,eff1_tex_json,eff1_ske_json",
+			"keys": "bg_jpg,egret_icon_png,description_json,piece_png,push_mp3,relive_png,restart_btn_png,setting_bg_jpg,setting_btn_png,setting_off_png,setting_on_png,start_btn_png,streak_png,back_btn_png,block1_png,block2_png,block3_png,finger_png,jump_mp3,eff1_tex_png,eff1_tex_json,eff1_ske_json,eff1_ske2_json,eff1_tex2_json,eff1_tex2_png,f1_png,f2_png,f3_png,f4_png,f5_png,f6_png,f7_png,y1_png,y2_png,y3_png,y4_png,y5_png,eff3_tex_json,eff3_tex_png,eff3_ske_json,tuowei_json,tuowei_png,eff2_tex_json,eff2_tex_png,eff2_ske_json",
 			"name": "preload"
 		}
 	],
@@ -107,11 +107,6 @@
 			"url": "assets/eff1_tex.png"
 		},
 		{
-			"name": "eff1_mc_json",
-			"type": "json",
-			"url": "assets/eff1_mc.json"
-		},
-		{
 			"name": "eff1_tex_json",
 			"type": "json",
 			"url": "assets/eff1_tex.json"
@@ -120,6 +115,121 @@
 			"name": "eff1_ske_json",
 			"type": "json",
 			"url": "assets/eff1_ske.json"
+		},
+		{
+			"name": "eff1_ske2_json",
+			"type": "json",
+			"url": "assets/eff1_ske.json"
+		},
+		{
+			"name": "eff1_tex2_json",
+			"type": "json",
+			"url": "assets/eff1_tex.json"
+		},
+		{
+			"name": "eff1_tex2_png",
+			"type": "image",
+			"url": "assets/eff1_tex.png"
+		},
+		{
+			"name": "f1_png",
+			"type": "image",
+			"url": "assets/f1.png"
+		},
+		{
+			"name": "f2_png",
+			"type": "image",
+			"url": "assets/f2.png"
+		},
+		{
+			"name": "f3_png",
+			"type": "image",
+			"url": "assets/f3.png"
+		},
+		{
+			"name": "f4_png",
+			"type": "image",
+			"url": "assets/f4.png"
+		},
+		{
+			"name": "f5_png",
+			"type": "image",
+			"url": "assets/f5.png"
+		},
+		{
+			"name": "f6_png",
+			"type": "image",
+			"url": "assets/f6.png"
+		},
+		{
+			"name": "f7_png",
+			"type": "image",
+			"url": "assets/f7.png"
+		},
+		{
+			"name": "y1_png",
+			"type": "image",
+			"url": "assets/y1.png"
+		},
+		{
+			"name": "y2_png",
+			"type": "image",
+			"url": "assets/y2.png"
+		},
+		{
+			"name": "y3_png",
+			"type": "image",
+			"url": "assets/y3.png"
+		},
+		{
+			"name": "y4_png",
+			"type": "image",
+			"url": "assets/y4.png"
+		},
+		{
+			"name": "y5_png",
+			"type": "image",
+			"url": "assets/y5.png"
+		},
+		{
+			"name": "eff3_tex_json",
+			"type": "json",
+			"url": "assets/eff3_tex.json"
+		},
+		{
+			"name": "eff3_tex_png",
+			"type": "image",
+			"url": "assets/eff3_tex.png"
+		},
+		{
+			"name": "eff3_ske_json",
+			"type": "json",
+			"url": "assets/eff3_ske.json"
+		},
+		{
+			"name": "tuowei_json",
+			"type": "json",
+			"url": "assets/tuowei.json"
+		},
+		{
+			"name": "tuowei_png",
+			"type": "image",
+			"url": "assets/tuowei.png"
+		},
+		{
+			"name": "eff2_tex_json",
+			"type": "json",
+			"url": "assets/eff2_tex.json"
+		},
+		{
+			"name": "eff2_tex_png",
+			"type": "image",
+			"url": "assets/eff2_tex.png"
+		},
+		{
+			"name": "eff2_ske_json",
+			"type": "json",
+			"url": "assets/eff2_ske.json"
 		}
 	]
 }

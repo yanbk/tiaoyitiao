@@ -12,26 +12,43 @@ var Block = (function (_super) {
     __extends(Block, _super);
     function Block() {
         var _this = _super.call(this) || this;
-        _this.area = new egret.Sprite();
+        _this._perfect = false;
         _this.initView();
         return _this;
     }
     Block.prototype.initView = function () {
-        var blockimg = Utils.createBitmapByName(Utils.blockimg[Math.floor(Math.random() * 3)]);
+        var random = Math.floor(Math.random() * 12);
+        var blockimg = Utils.createBitmapByName(Utils.blockimg[random]);
         this.addChild(blockimg);
-        this.area.graphics.beginFill(0x0000ff, 0);
-        this.area.graphics.moveTo(224, 0);
-        this.area.graphics.lineTo(358, 78);
-        this.area.graphics.lineTo(224, 156);
-        this.area.graphics.lineTo(90, 78);
-        this.area.graphics.lineTo(224, 0);
-        this.area.graphics.endFill();
-        this.addChild(this.area);
+        // 设置方块的锚点
+        if (random > 6) {
+            this.anchorOffsetX = 227;
+        }
+        else {
+            this.anchorOffsetX = 219;
+        }
+        this.anchorOffsetY = 242;
+        this.eff3 = Utils.egretFactory.buildArmatureDisplay("eff3");
+        this.eff3.anchorOffsetX = -220;
+        this.eff3.anchorOffsetY = -70;
+        this.eff3.addEventListener(dragonBones.EventObject.COMPLETE, this.eff3Complete, this);
     };
-    Block.prototype.isHit = function (x, y) {
-        // console.log(x,y,this.area.x,this.area.y)
-        var ishit = this.area.hitTestPoint(x, y);
-        return ishit;
+    Object.defineProperty(Block.prototype, "perfect", {
+        get: function () {
+            return this._perfect;
+        },
+        set: function (val) {
+            this._perfect = val;
+            if (val) {
+                this.addChild(this.eff3);
+                this.eff3.animation.play("newAnimation", 1).timeScale = 2;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Block.prototype.eff3Complete = function () {
+        this.removeChild(this.eff3);
     };
     return Block;
 }(egret.Sprite));

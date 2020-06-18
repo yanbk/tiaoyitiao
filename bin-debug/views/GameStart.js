@@ -16,6 +16,8 @@ var GameStart = (function (_super) {
         return _this;
     }
     GameStart.prototype.init = function () {
+        var bg = Utils.createBitmapByName('bg_jpg');
+        this.addChild(bg);
         var startBtn = Utils.createBitmapByName('start_btn_png');
         this.addChild(startBtn);
         startBtn.x = (Utils.stageWidth - startBtn.width) / 2;
